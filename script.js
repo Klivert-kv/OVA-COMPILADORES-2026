@@ -71,12 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnOpenExternal = document.getElementById('btn-open-external');
   const iframeWrapper = document.querySelector('.iframe-wrapper');
 
-  // Ajustes de API, Modal y Tema
-  const settingsDialog = document.getElementById('settings-dialog');
-  const btnOpenSettings = document.getElementById('open-settings');
-  const btnCloseSettings = document.getElementById('close-settings');
-  const btnSaveSettings = document.getElementById('btn-save-settings');
-  const btnResetSettings = document.getElementById('btn-reset-settings');
   const themeToggle = document.getElementById('theme-toggle');
 
   // Inyección del Botón de Pantalla Completa en la barra de controles
@@ -101,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const root = document.documentElement;
     const headerH = portalHeader ? portalHeader.offsetHeight : 72;
     root.style.setProperty('--portal-header-height', `${headerH}px`);
+    root.style.setProperty('--portal-header-h', `${headerH}px`);
     root.style.setProperty('--portal-chrome-offset', `${headerH + 78}px`);
   }
 
@@ -396,65 +391,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initTheme();
 
-  // ── DIÁLOGO DE AJUSTES & INTEGRACIÓN DE APIS (POSTMESSAGE) ─────────────────
-  // Cargar valores iniciales de la base de datos local (LocalStorage)
-  function loadSavedSettings() {
-    const urls = ['sintactico', 'mini-compilador', 'automata'];
-    urls.forEach(key => {
-      const savedUrl = localStorage.getItem(`url-${key}`);
-      const input = document.getElementById(`url-${key}`);
-      if (input && savedUrl) {
-        input.value = savedUrl;
-      }
-    });
-  }
-
-  // Toggles de visualización del Dialog Settings
-  if (btnOpenSettings && settingsDialog) {
-    btnOpenSettings.addEventListener('click', () => {
-      loadSavedSettings();
-      settingsDialog.showModal();
-    });
-  }
-
-  if (btnCloseSettings && settingsDialog) {
-    btnCloseSettings.addEventListener('click', () => {
-      settingsDialog.close();
-    });
-  }
-
-  // Resetear configuraciones
-  if (btnResetSettings) {
-    btnResetSettings.addEventListener('click', () => {
-      const inputs = settingsDialog.querySelectorAll('input[type="url"]');
-      inputs.forEach(input => input.value = '');
-    });
-  }
-
-  // Guardar configuraciones en localStorage
-  const settingsForm = settingsDialog ? settingsDialog.querySelector('form') : null;
-  if (settingsForm) {
-    settingsForm.addEventListener('submit', (e) => {
-      const urls = ['sintactico', 'mini-compilador', 'automata'];
-      urls.forEach(key => {
-        const input = document.getElementById(`url-${key}`);
-        if (input) {
-          if (input.value.trim() !== '') {
-            localStorage.setItem(`url-${key}`, input.value.trim());
-          } else {
-            localStorage.removeItem(`url-${key}`);
-          }
-        }
-      });
-      // Sincronizar APIs actuales con el iframe cargado
-      injectSettingsToIframe();
-    });
-  }
-
-  // Enviar configuraciones del backend al iframe utilizando postMessage
+  // ── INTEGRACIÓN DE APIS EN IFRAME (POSTMESSAGE) ───────────────────────────
   function injectSettingsToIframe() {
     if (ovaIframe.src === 'about:blank') return;
-    
+
     const settings = {
       theme: document.body.classList.contains('light-theme') ? 'light' : 'dark',
       apiUrls: {
@@ -469,9 +409,8 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'USB_PORTAL_CONFIG',
         config: settings
       }, '*');
-      console.log('API config inyectada a la simulación con éxito.', settings.apiUrls);
     } catch (error) {
-      console.warn('No se pudo inyectar la configuración en el iframe (CORS o iframe no cargado):', error);
+      // Ignorar si hay políticas CORS restrictivas
     }
   }
 

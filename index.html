@@ -44,6 +44,16 @@
           <span class="usb-campus">Campus Cúcuta</span>
         </div>
       </div>
+      <div class="header-weather" id="header-weather" aria-label="Fecha y hora" aria-live="polite">
+        <div class="header-weather__row header-weather__date">
+          <span class="header-weather__label" aria-hidden="true">📅</span>
+          <time id="header-date" datetime="">—</time>
+        </div>
+        <div class="header-weather__row header-weather__time">
+          <span class="header-weather__label" aria-hidden="true">🕒</span>
+          <time id="header-clock">12:00:00 am</time>
+        </div>
+      </div>
       <!-- Botón de Cambio de Tema -->
       <button class="theme-toggle-btn" id="theme-toggle" aria-label="Cambiar tema de color">
         <svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -140,17 +150,6 @@
           </li>
         </ul>
       </nav>
-
-      <!-- Panel de Ajustes Rápidos en la Sidebar -->
-      <div class="sidebar-footer">
-        <button class="settings-btn" id="open-settings" aria-label="Configurar URLs del servidor">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
-          <span>Configurar Servidores</span>
-        </button>
-      </div>
     </aside>
 
     <!-- Overlay de Sidebar en móviles -->
@@ -158,6 +157,8 @@
 
     <!-- Área Principal de Contenido (Dashboard + Visor Iframe) -->
     <main class="main-content" id="main-content">
+
+      <canvas class="dashboard-network-canvas" id="dashboard-network-canvas" aria-hidden="true"></canvas>
       
       <!-- VISTA 1: DASHBOARD PRINCIPAL -->
       <section class="dashboard-view" id="dashboard-view">
@@ -174,9 +175,57 @@
               <button class="btn-hero-secondary" id="btn-about-project">Conocer Proyecto</button>
             </div>
           </div>
-          <!-- Logo del programa de Ingeniería de Sistemas real -->
           <div class="hero-logo-wrapper">
-            <img src="assets/img/logo-sistemas.png" alt="Logo Ingeniería de Sistemas USB" class="hero-logo">
+            <div class="hero-visual-stage" aria-hidden="true">
+              <div class="hero-ambient-glow"></div>
+              <svg class="hero-circuit-svg" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                <line class="hero-circuit-line" x1="160" y1="160" x2="278" y2="98"></line>
+                <line class="hero-circuit-line" x1="160" y1="160" x2="42" y2="98"></line>
+                <line class="hero-circuit-line" x1="160" y1="160" x2="278" y2="222"></line>
+                <line class="hero-circuit-line" x1="160" y1="160" x2="42" y2="222"></line>
+                <line class="hero-circuit-line hero-circuit-line--branch" x1="220" y1="98" x2="248" y2="68"></line>
+                <line class="hero-circuit-line hero-circuit-line--branch" x1="72" y1="98" x2="44" y2="68"></line>
+                <line class="hero-circuit-line hero-circuit-line--branch" x1="220" y1="222" x2="248" y2="252"></line>
+                <line class="hero-circuit-line hero-circuit-line--branch" x1="72" y1="222" x2="44" y2="252"></line>
+                <circle class="hero-circuit-node" cx="278" cy="98" r="2.5"></circle>
+                <circle class="hero-circuit-node" cx="42" cy="98" r="2"></circle>
+                <circle class="hero-circuit-node" cx="278" cy="222" r="2"></circle>
+                <circle class="hero-circuit-node" cx="42" cy="222" r="2.5"></circle>
+              </svg>
+              <div class="hero-orbit-ring hero-orbit-ring--far"></div>
+              <div class="hero-orbit-ring hero-orbit-ring--outer"></div>
+              <svg class="hero-arc-svg" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                <circle class="hero-orbit-arc" cx="160" cy="160" r="118" fill="none"></circle>
+              </svg>
+              <div class="hero-orbit-ring hero-orbit-ring--mid"></div>
+              <div class="hero-orbit-ring hero-orbit-ring--inner"></div>
+              <div class="hero-orbit-satellite hero-orbit-satellite--a"><span class="hero-star"></span></div>
+              <div class="hero-orbit-satellite hero-orbit-satellite--b"><span class="hero-star hero-star--dim"></span></div>
+              <div class="hero-orbit-satellite hero-orbit-satellite--c"><span class="hero-star hero-star--small"></span></div>
+              <span class="hero-star-point hero-star-point--1"></span>
+              <span class="hero-star-point hero-star-point--2"></span>
+              <span class="hero-star-point hero-star-point--3"></span>
+              <span class="hero-star-point hero-star-point--4"></span>
+              <span class="hero-star-point hero-star-point--5"></span>
+              <span class="hero-star-point hero-star-point--6"></span>
+              <span class="hero-particle hero-particle--1"></span>
+              <span class="hero-particle hero-particle--2"></span>
+              <span class="hero-particle hero-particle--3"></span>
+              <span class="hero-particle hero-particle--4"></span>
+              <span class="hero-particle hero-particle--5"></span>
+              <span class="hero-particle hero-particle--6"></span>
+              <div class="hero-stage-base">
+                <span class="hero-base-ring hero-base-ring--1"></span>
+                <span class="hero-base-ring hero-base-ring--2"></span>
+                <span class="hero-base-ring hero-base-ring--3"></span>
+                <span class="hero-base-glow"></span>
+              </div>
+            </div>
+            <div class="hero-logo-core">
+              <div class="hero-logo-halo" aria-hidden="true"></div>
+              <div class="hero-logo-disc" aria-hidden="true"></div>
+              <img src="assets/img/logo-sistemas.png" alt="Logo Ingeniería de Sistemas USB" class="hero-logo">
+            </div>
           </div>
         </header>
 
@@ -424,8 +473,9 @@
         <!-- Nueva Sección: Docente Asesor -->
         <section class="advisor-section">
           <div class="advisor-card">
+            <div class="advisor-glow" aria-hidden="true"></div>
             <div class="advisor-visual">
-              <div class="advisor-badge">
+              <div class="advisor-badge" aria-hidden="true">
                 <span class="advisor-initials">AS</span>
               </div>
             </div>
@@ -440,6 +490,19 @@
               </ul>
               <span class="advisor-institution">Universidad Simón Bolívar</span>
             </div>
+            <figure class="advisor-photo-wrap">
+              <span class="advisor-photo-halo" aria-hidden="true"></span>
+              <span class="advisor-photo-ring" aria-hidden="true"></span>
+              <img
+                src="assets/img/Foto-Alvaro.jpg"
+                alt="Alvaro Salamanca Landínez"
+                class="advisor-photo"
+                width="160"
+                height="210"
+                loading="lazy"
+                decoding="async"
+              >
+            </figure>
           </div>
         </section>
 
@@ -496,43 +559,6 @@
 
     </main>
   </div>
-
-  <!-- Modal de Configuración de Servidores para API Backend -->
-  <dialog class="settings-modal" id="settings-dialog">
-    <div class="modal-header">
-      <h2 class="modal-title">Configuración de Servidores</h2>
-      <button class="close-modal-btn" id="close-settings" aria-label="Cerrar modal">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-    <form method="dialog" class="modal-form">
-      <p class="modal-intro">Configura las URLs de los servidores API si las simulaciones están desplegadas en la nube (ej. Render/FastAPI) o en desarrollo local.</p>
-      
-      <div class="form-group">
-        <label for="url-sintactico">API Analizador Sintáctico (Fabian - Sofi):</label>
-        <input type="url" id="url-sintactico" name="url-sintactico" placeholder="Default: http://localhost:8001" pattern="https?://.*">
-      </div>
-
-      <div class="form-group">
-        <label for="url-mini-compilador">API Mini Compilador (Islender - Jhoan):</label>
-        <input type="url" id="url-mini-compilador" name="url-mini-compilador" placeholder="Default: http://localhost:8002" pattern="https?://.*">
-      </div>
-
-      <div class="form-group">
-        <label for="url-automata">API Simulador Autómatas FASS (Ronald - Johel):</label>
-        <input type="url" id="url-automata" name="url-automata" placeholder="Default: http://localhost:5000" pattern="https?://.*">
-        <span class="help-text">Si está vacío, usará el motor local JavaScript offline de la OVA.</span>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="btn-secondary" id="btn-reset-settings">Restablecer Defaults</button>
-        <button type="submit" class="btn-primary" id="btn-save-settings">Guardar Cambios</button>
-      </div>
-    </form>
-  </dialog>
 
   <!-- Modales Dinámicos de Información Detallada de OVAS -->
   
@@ -740,7 +766,8 @@
   <footer class="portal-footer">
     <div class="footer-grid">
       <div class="footer-logo-col">
-        <img src="assets/img/logo-simonbolivar.png" alt="Universidad Simón Bolívar" class="footer-logo">
+        <img src="assets/img/logo-simonbolivar.png" alt="Universidad Simón Bolívar" class="footer-logo footer-logo--dark">
+        <img src="assets/img/logo-usb-verde.png" alt="Universidad Simón Bolívar" class="footer-logo footer-logo--light">
       </div>
       <div class="footer-info-col">
         <span class="footer-title">UNIVERSIDAD SIMÓN BOLÍVAR</span>
@@ -759,6 +786,8 @@
   <!-- Archivos JavaScript — Centro de Aprendizaje + Portal -->
   <script src="js/learning-data.js"></script>
   <script src="js/learning-hub.js"></script>
+  <script src="js/dashboard-network-bg.js"></script>
+  <script src="js/header-weather.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
