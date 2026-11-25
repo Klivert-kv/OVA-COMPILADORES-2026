@@ -109,3 +109,64 @@ Resultados obtenidos ejecutando `tests/pruebas-semanticas.test.js` sobre la v1.6
 - **Posición:** los mensajes indican la línea, pero no la columna (los tokens no guardan columna).
 - **Palabras reservadas nuevas:** `int`, `float`, `double`, `string`, `bool`, `boolean`, `true` y `false` ya no pueden usarse como nombres de variable.
 - No se construye un AST explícito; el código intermedio es una representación didáctica.
+
+## 7. Evidencias de ejecución
+
+Capturas de la aplicación dentro del portal de la OVA (carpeta `docs/evidencias/`). El informe en PDF (`10-informe-tecnico-reto3.pdf`) las presenta con su descripción completa.
+
+**Figura 1.** Antes (v1.5.7): `int x; int x;` da cuatro errores que no corresponden al caso.
+
+![Figura 1](evidencias/antes-duplicada.jpg)
+
+**Figura 2.** Después (v1.6.0): un único error semántico de declaración duplicada.
+
+![Figura 2](evidencias/despues-duplicada.jpg)
+
+**Figura 3.** Antes (v1.5.7): `int x = "hola";` no detecta la incompatibilidad de tipos.
+
+![Figura 3](evidencias/antes-tipos.jpg)
+
+**Figura 4.** Después (v1.6.0): error semántico, no se puede asignar texto a entero.
+
+![Figura 4](evidencias/despues-tipos.jpg)
+
+**Figura 5.** `int x = 10;`: declaración válida; `x` queda en la tabla de símbolos como entero.
+
+![Figura 5](evidencias/p01-declaracion.jpg)
+
+**Figura 6.** `x = 20;` sin declaración previa: error por variable no declarada.
+
+![Figura 6](evidencias/p02-no-declarada.jpg)
+
+**Figura 7.** `int x = 10 + 2;`: operación válida.
+
+![Figura 7](evidencias/p04-operacion.jpg)
+
+**Figura 8.** Ejemplo con errores: recuperación ante `eentero` y los 8 errores esperados.
+
+![Figura 8](evidencias/ejemplo-errores.jpg)
+
+**Figura 9.** Ámbitos: `b` no es visible fuera del bloque del `si`.
+
+![Figura 9](evidencias/ambitos.jpg)
+
+**Figura 10.** Tabla de símbolos: dos variables `a` en ámbitos distintos.
+
+![Figura 10](evidencias/ambitos-tabla.jpg)
+
+**Figura 11.** Errores léxicos diferenciados de los sintácticos.
+
+![Figura 11](evidencias/lexico.jpg)
+
+**Figura 12.** Advertencia por usar una variable sin valor (no cuenta como error).
+
+![Figura 12](evidencias/advertencia.jpg)
+
+**Figura 13.** Pruebas automáticas sobre la versión original: 19/31.
+
+![Figura 13](evidencias/term_before.jpg)
+
+**Figura 14.** Pruebas automáticas sobre la versión corregida: 31/31.
+
+![Figura 14](evidencias/term_after.jpg)
+
